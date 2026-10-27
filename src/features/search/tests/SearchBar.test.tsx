@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 import { filtersReset } from '@/store/filtersSlice';
 import { renderWithStore } from '@/test/render';
-import { SearchBar } from './SearchBar';
+import { SearchBar } from '../SearchBar';
 
 describe('SearchBar', () => {
   it('submits keyword and location', async () => {

@@ -13,6 +13,7 @@ export const listingsApi = createApi({
       query: (query) => `listings?${toSearchParams(query).toString()}`,
       providesTags: (result) => [
         ...(result?.data.map((listing) => ({ type: 'Listing' as const, id: listing.key })) ?? []),
+        // The collection tag also identifies empty searches for future invalidation.
         { type: 'Listing', id: 'LIST' },
       ],
     }),

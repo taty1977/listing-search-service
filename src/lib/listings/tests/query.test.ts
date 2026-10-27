@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { listing } from '@/test/fixtures';
-import { distanceInMiles, matchesQuery, parseListingQuery, searchListings, toSearchParams } from './query';
-import type { ListingQuery } from './types';
+import { distanceInMiles, matchesQuery, parseListingQuery, searchListings, toSearchParams } from '../query';
+import type { ListingQuery } from '../types';
 
 const austinCondo = listing({
   id: 'a',

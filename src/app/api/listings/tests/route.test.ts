@@ -1,8 +1,8 @@
 import { NextRequest } from 'next/server';
 import { describe, expect, it } from 'vitest';
 import type { ApiError, Listing, ListingSearchResponse } from '@/lib/listings/types';
-import { GET as getListing } from './[source]/[id]/route';
-import { GET as searchListings } from './route';
+import { GET as getListing } from '../[source]/[id]/route';
+import { GET as searchListings } from '../route';
 
 const request = (path: string) => new NextRequest(new URL(path, 'http://localhost'));
 

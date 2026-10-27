@@ -7,7 +7,7 @@ import type { Config } from 'tailwindcss';
 import type { PluginAPI } from 'tailwindcss/types/config';
 import tokens, { type TokenTree } from './tokens/theme.tokens';
 
-type ScaleName = 'spacing' | 'radius' | 'font-size' | 'font-weight' | 'line-height';
+type ScaleName = 'spacing' | 'radius' | 'shadow' | 'font-size' | 'font-weight' | 'line-height';
 
 const isLeaf = (value: string | TokenTree): value is string => typeof value === 'string';
 
@@ -40,10 +40,7 @@ const preset = {
       fontSize: scale('font-size'),
       fontWeight: scale('font-weight'),
       lineHeight: scale('line-height'),
-      boxShadow: {
-        card: '0 1px 2px rgba(15, 26, 44, 0.06), 0 1px 3px rgba(15, 26, 44, 0.08)',
-        'card-hover': '0 10px 24px rgba(15, 26, 44, 0.12)',
-      },
+      boxShadow: scale('shadow'),
     },
   },
   plugins: [
@@ -54,6 +51,7 @@ const preset = {
           ...toCssVars(tokens.colors),
           ...toCssVars({ spacing: tokens.spacing }),
           ...toCssVars({ radius: tokens.radius }),
+          ...toCssVars({ shadow: tokens.shadow }),
           ...toCssVars({ 'font-size': tokens['font-size'] }),
           ...toCssVars({ 'font-weight': tokens['font-weight'] }),
           ...toCssVars({ 'line-height': tokens['line-height'] }),

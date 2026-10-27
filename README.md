@@ -26,12 +26,48 @@ Everything is written in TypeScript, including the Tailwind, PostCSS and Vitest 
 
 ```bash
 npm install
-npm run dev        # http://localhost:3000
+npm run dev        # opens the local URL in your browser when the server is ready
 npm test           # vitest run
 npm run lint       # eslint
 npm run typecheck  # next typegen && tsc --noEmit
 npm run build && npm start
 ```
+
+### Git hooks
+
+`npm install` sets up Husky through the `prepare` script. Before each commit,
+the pre-commit hook runs `npm run lint` and `npm test`; a failure blocks the commit.
+
+### Test organization
+
+Tests live in a `tests` subfolder within their owning feature or module (for example,
+`src/features/search/tests`). Shared fixtures and render helpers stay in `src/test`.
+Run all tests with `npm test`.
+
+Theme contract tests live in `tokens/tests`; listing-detail tests cover loading,
+success, not-found, server-error/retry, and network failures.
+
+Browser smoke tests live in `e2e/tests` and exercise the real app and API on desktop
+and mobile Chromium (pagination, search, filters, detail navigation, and runtime errors):
+
+```bash
+npx playwright install chromium # once after installing dependencies
+npm run test:e2e                # builds, starts on port 3100, tests, and stops the server
+npm run test:e2e:dev            # repeats the suite against Next dev without opening a browser
+```
+
+Port 3100 must be free. Browser tests are separate from the fast Husky pre-commit
+checks. GitHub Actions runs lint, typecheck, unit/component tests, a production build,
+and production/development browser tests for pull requests and pushes to `main`.
+Configure branch protection to require the `validate` check before merging.
+Browser failure reports are retained as workflow artifacts.
+
+The browser suite also verifies direct entry to a detail route and live color/shadow
+variable overrides on real components. Development runs catch prerender warnings
+that may not appear in production. Run the two browser commands sequentially:
+both use port 3100. Development tests use `.next-e2e` to avoid locking the normal
+dev server's `.next` directory. Failures retain traces and screenshots;
+development reports are stored separately under `playwright-report/dev`.
 
 ### Environment variables
 
@@ -93,6 +129,15 @@ interface ListingFeedAdapter {
 ### Design tokens
 
 Tokens use the same names as the [ui_components](https://github.com/taty1977/ui_components) Tailwind preset, so utilities such as `bg-background-surface`, `text-text-secondary`, `border-border-subtle`, `bg-primary-500`, `rounded-lg`, `text-15` and `font-semibold` behave the same way in both projects. The values follow a Crexi-style commercial real-estate palette: navy text and surfaces, a bright blue for calls to action, and cool grays. `src/lib/utils/cn.ts` registers the custom scales with tailwind-merge so classes merge correctly.
+
+Card shadows follow the same token pattern: `shadow-card` and `shadow-card-hover` reference `--shadow-card` and `--shadow-card-hover`, whose defaults are defined in `tokens/theme.tokens.ts`.
+
+The default token object defines the shared `ThemeTokens` contract. Future theme
+objects should use `satisfies ThemeTokens` (imported from `tokens/theme.tokens.ts`)
+to require the same nested token names while allowing different string values.
+Tests verify that every default token is emitted as a CSS variable and that
+representative Tailwind utilities reference those variables. Only the default
+theme is currently shipped; theme switching and persistence are not yet implemented.
 
 ## Assumptions
 

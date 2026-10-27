@@ -58,6 +58,7 @@ const filtersSlice = createSlice({
   selectors: {
     selectFilters: (state) => state,
     selectResetCount: (state) => state.resetCount,
+    // Keep query identity stable when unrelated store updates rerender subscribers.
     selectListingQuery: createSelector([(state: FiltersState) => state], (state): ListingQuery => ({
       q: state.q || undefined,
       location: state.location || undefined,

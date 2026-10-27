@@ -50,6 +50,7 @@ export const normalizeStatus = (value: string): ListingStatus => {
   return (LISTING_STATUSES as readonly string[]).includes(cleaned) ? (cleaned as ListingStatus) : 'active';
 };
 
+// First match wins; explicit house types precede generic apartment wording.
 const PROPERTY_TYPE_RULES: [PropertyType, RegExp][] = [
   ['land', /\b(vacant land|land parcel|lot \d+|acre lot|buildable lot)\b|^lot\b/i],
   ['multi_family', /\b(duplex|triplex|fourplex|multi-?family|\d+-unit building|apartment building)\b/i],

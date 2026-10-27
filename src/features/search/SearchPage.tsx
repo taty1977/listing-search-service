@@ -1,8 +1,9 @@
 'use client';
 
 import { AdjustmentsHorizontalIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { Badge, Button, Card } from '@/components/ui';
+import { ListingGridSkeleton } from '@/components/listings';
 import { selectActiveFilterCount } from '@/store/filtersSlice';
 import { useAppSelector } from '@/store/hooks';
 import { FilterPanel } from './FilterPanel';
@@ -57,7 +58,22 @@ export function SearchPage() {
           </Card>
         </aside>
 
-        <SearchResults />
+        {/* RTK Query reads time internally; isolate it from the static prerender. */}
+        <Suspense
+          fallback={
+            <section aria-labelledby="results-heading" className="flex flex-col gap-4">
+              <h2
+                id="results-heading"
+                className="text-18 font-semibold text-text-primary"
+              >
+                Searching listings…
+              </h2>
+              <ListingGridSkeleton />
+            </section>
+          }
+        >
+          <SearchResults />
+        </Suspense>
       </div>
     </>
   );

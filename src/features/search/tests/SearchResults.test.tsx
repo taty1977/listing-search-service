@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from 'vitest';
 import type { ListingSearchResponse } from '@/lib/listings/types';
 import { listing } from '@/test/fixtures';
 import { renderWithStore } from '@/test/render';
-import { SearchResults } from './SearchResults';
+import { SearchResults } from '../SearchResults';
 
 const page = (overrides: Partial<ListingSearchResponse['meta']> = {}, data = [listing()]): ListingSearchResponse => ({
   data,

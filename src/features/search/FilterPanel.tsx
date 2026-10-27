@@ -40,6 +40,7 @@ export function FilterPanel({ onDone }: FilterPanelProps) {
 
   const resetCount = useAppSelector(selectResetCount);
   useEffect(() => {
+    // Discard draft inputs even when the applied filters were already empty.
     if (resetCount > 0) reset(EMPTY_FORM_VALUES);
   }, [resetCount, reset]);
 

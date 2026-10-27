@@ -85,6 +85,7 @@ export function searchListings(listings: Listing[], query: ListingQuery) {
     .sort((a, b) => comparator(a, b) || a.key.localeCompare(b.key));
 
   const total = matches.length;
+  // Empty results still use page 1 so clients never receive a page-zero response.
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
   const page = Math.min(Math.max(query.page ?? 1, 1), totalPages);
   const start = (page - 1) * pageSize;

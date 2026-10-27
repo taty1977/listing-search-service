@@ -8,8 +8,8 @@ import {
   selectActiveFilterCount,
   selectListingQuery,
   sortChanged,
-} from './filtersSlice';
-import { makeStore } from './store';
+} from '../filtersSlice';
+import { makeStore } from '../store';
 
 describe('filtersSlice', () => {
   it('trims search input and resets paging', () => {

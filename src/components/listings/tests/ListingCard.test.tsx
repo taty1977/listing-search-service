@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { listing } from '@/test/fixtures';
-import { ListingCard } from './ListingCard';
+import { ListingCard } from '../ListingCard';
 
 describe('ListingCard', () => {
   it('shows the key listing facts and links to the detail page', () => {

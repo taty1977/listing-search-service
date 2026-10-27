@@ -8,6 +8,7 @@ const compactCurrency = new Intl.NumberFormat('en-US', {
   maximumFractionDigits: 2,
 });
 const integer = new Intl.NumberFormat('en-US');
+// Date-only feed values must not shift to the previous day in western time zones.
 const date = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
 
 export const formatPrice = (value: number) => currency.format(value);

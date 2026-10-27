@@ -10,7 +10,7 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     setupFiles: ['./vitest.setup.ts'],
-    include: ['src/**/*.test.{ts,tsx}'],
+    include: ['src/**/*.test.{ts,tsx}', 'tokens/**/*.test.ts'],
     css: false,
     // RTK Query needs an absolute base URL outside the browser.
     env: { NEXT_PUBLIC_LISTINGS_API_URL: 'http://localhost/api' },

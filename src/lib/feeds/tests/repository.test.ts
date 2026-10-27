@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { rawListing } from '@/test/fixtures';
-import { aggregateListings, findListing, findListings } from './repository';
-import { createStaticFeed } from './staticFeed';
-import type { ListingFeedAdapter } from './types';
+import { aggregateListings, findListing, findListings } from '../repository';
+import { createStaticFeed } from '../staticFeed';
+import type { ListingFeedAdapter } from '../types';
 
 const feedA = createStaticFeed('MLS_A', [rawListing({ id: '1', source: 'MLS_A' }), rawListing({ id: '2', source: 'MLS_A' })]);
 const feedB = createStaticFeed('MLS_B', [rawListing({ id: '1', source: 'MLS_B', status: 'sold' })]);

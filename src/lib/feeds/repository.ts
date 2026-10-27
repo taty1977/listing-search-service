@@ -26,6 +26,7 @@ export async function aggregateListings(feeds: ListingFeedAdapter[] = listingFee
     sources.push(source);
     for (const raw of result.value) {
       const listing = normalizeListing({ ...raw, source: raw.source || source });
+      // Deduplicate within a source without merging identical IDs from different feeds.
       byKey.set(listing.key, listing);
     }
   });

@@ -2,7 +2,7 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { renderWithStore } from '@/test/render';
-import { FilterPanel } from './FilterPanel';
+import { FilterPanel } from '../FilterPanel';
 
 describe('FilterPanel', () => {
   it('applies the selected filters to the store', async () => {

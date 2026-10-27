@@ -108,6 +108,10 @@ const tokens = {
     xl: '10px',
     round: '500px',
   },
+  shadow: {
+    card: '0 1px 2px rgba(15, 26, 44, 0.06), 0 1px 3px rgba(15, 26, 44, 0.08)',
+    'card-hover': '0 10px 24px rgba(15, 26, 44, 0.12)',
+  },
   'font-size': {
     12: '12px',
     13: '13px',
@@ -131,5 +135,8 @@ const tokens = {
     68: '68px',
   },
 };
+
+/** New themes must preserve these token names while supplying their own string values. */
+export type ThemeTokens = typeof tokens;
 
 export default tokens;

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { rawListing } from '@/test/fixtures';
-import { inferPropertyType, normalizeListing, normalizeState, normalizeStatus, normalizeZip, toTitleCase } from './normalize';
+import { inferPropertyType, normalizeListing, normalizeState, normalizeStatus, normalizeZip, toTitleCase } from '../normalize';
 
 describe('normalizeListing', () => {
   it('cleans up inconsistencies between feeds', () => {
