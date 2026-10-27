@@ -49,6 +49,6 @@ describe('filtersSlice', () => {
     const store = makeStore();
     store.dispatch(searchSubmitted({ q: 'x', location: 'y' }));
     store.dispatch(filtersReset());
-    expect(store.getState().filters).toEqual(initialFiltersState);
+    expect(store.getState().filters).toEqual({ ...initialFiltersState, resetCount: 1 });
   });
 });

@@ -12,6 +12,11 @@ export interface FiltersState {
   statuses: ListingStatus[];
   sort: SortOption;
   page: number;
+  /**
+   * Incremented on every reset so forms can discard un-applied input even when the store
+   * already holds the initial filters (react-hook-form ignores unchanged `values`).
+   */
+  resetCount: number;
 }
 
 export type FilterCriteria = Pick<
@@ -26,6 +31,7 @@ export const initialFiltersState: FiltersState = {
   statuses: [],
   sort: 'newest',
   page: 1,
+  resetCount: 0,
 };
 
 const filtersSlice = createSlice({
@@ -47,10 +53,11 @@ const filtersSlice = createSlice({
     pageChanged(state, action: PayloadAction<number>) {
       state.page = Math.max(1, Math.trunc(action.payload));
     },
-    filtersReset: () => initialFiltersState,
+    filtersReset: (state) => ({ ...initialFiltersState, resetCount: state.resetCount + 1 }),
   },
   selectors: {
     selectFilters: (state) => state,
+    selectResetCount: (state) => state.resetCount,
     selectListingQuery: createSelector([(state: FiltersState) => state], (state): ListingQuery => ({
       q: state.q || undefined,
       location: state.location || undefined,
@@ -71,5 +78,5 @@ const filtersSlice = createSlice({
 });
 
 export const { searchSubmitted, filtersApplied, sortChanged, pageChanged, filtersReset } = filtersSlice.actions;
-export const { selectFilters, selectListingQuery, selectActiveFilterCount } = filtersSlice.selectors;
+export const { selectFilters, selectResetCount, selectListingQuery, selectActiveFilterCount } = filtersSlice.selectors;
 export default filtersSlice;

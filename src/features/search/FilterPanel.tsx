@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Field, Input, Select, ToggleChip } from '@/components/ui';
 import {
@@ -9,9 +9,11 @@ import {
   PROPERTY_TYPE_LABELS,
   STATUS_LABELS,
 } from '@/lib/listings/types';
-import { filtersApplied, filtersReset, selectFilters } from '@/store/filtersSlice';
+import { filtersApplied, filtersReset, initialFiltersState, selectFilters, selectResetCount } from '@/store/filtersSlice';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { toFilterCriteria, toFilterFormValues, type FilterFormValues } from './filterForm';
+
+const EMPTY_FORM_VALUES = toFilterFormValues(initialFiltersState);
 
 const BED_OPTIONS = [1, 2, 3, 4, 5];
 const BATH_OPTIONS = [1, 1.5, 2, 3, 4];
@@ -32,8 +34,14 @@ export function FilterPanel({ onDone }: FilterPanelProps) {
     register,
     handleSubmit,
     getValues,
+    reset,
     formState: { errors },
   } = useForm<FilterFormValues>({ values, mode: 'onSubmit' });
+
+  const resetCount = useAppSelector(selectResetCount);
+  useEffect(() => {
+    if (resetCount > 0) reset(EMPTY_FORM_VALUES);
+  }, [resetCount, reset]);
 
   const onSubmit = (formValues: FilterFormValues) => {
     dispatch(filtersApplied(toFilterCriteria(formValues)));

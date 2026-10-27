@@ -33,7 +33,7 @@ describe('SearchResults', () => {
     mockFetch(Response.json(page({ total: 0 }, [])), Response.json(page()));
     const user = userEvent.setup();
     const { store } = renderWithStore(<SearchResults />, {
-      filters: { q: 'castle', location: '', propertyTypes: [], statuses: [], sort: 'newest', page: 1 },
+      filters: { q: 'castle', location: '', propertyTypes: [], statuses: [], sort: 'newest', page: 1, resetCount: 0 },
     });
 
     expect(await screen.findByText('No properties match your search')).toBeInTheDocument();

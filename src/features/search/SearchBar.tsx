@@ -1,10 +1,10 @@
 'use client';
 
 import { MagnifyingGlassIcon, MapPinIcon } from '@heroicons/react/24/outline';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Input } from '@/components/ui';
-import { searchSubmitted, selectFilters } from '@/store/filtersSlice';
+import { searchSubmitted, selectFilters, selectResetCount } from '@/store/filtersSlice';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 
 interface SearchFormValues {
@@ -15,9 +15,14 @@ interface SearchFormValues {
 export function SearchBar() {
   const dispatch = useAppDispatch();
   const { q, location } = useAppSelector(selectFilters);
-  // `values` keeps the form in sync when the store changes elsewhere (e.g. "Clear all").
+  // `values` keeps the form in sync when the store changes elsewhere; `resetCount` also clears
+  // un-submitted input when "Clear all" runs while the store is already empty.
   const values = useMemo(() => ({ q, location }), [q, location]);
-  const { register, handleSubmit } = useForm<SearchFormValues>({ values });
+  const { register, handleSubmit, reset } = useForm<SearchFormValues>({ values });
+  const resetCount = useAppSelector(selectResetCount);
+  useEffect(() => {
+    if (resetCount > 0) reset({ q: '', location: '' });
+  }, [resetCount, reset]);
 
   return (
     <form

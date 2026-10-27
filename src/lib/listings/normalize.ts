@@ -54,8 +54,12 @@ const PROPERTY_TYPE_RULES: [PropertyType, RegExp][] = [
   ['land', /\b(vacant land|land parcel|lot \d+|acre lot|buildable lot)\b|^lot\b/i],
   ['multi_family', /\b(duplex|triplex|fourplex|multi-?family|\d+-unit building|apartment building)\b/i],
   ['townhouse', /\b(townhome|townhouse|town house|row ?house)\b/i],
-  ['condo', /\b(condo|condominium|apt|apartment|unit|flat)\b|#/i],
+  ['single_family', /\b(single[- ]family|detached (home|house))\b/i],
+  ['condo', /\b(condo|condominium|apartment)\b/i],
 ];
+
+// Unit designators only indicate a condo when they appear in the street address ("Unit 4B", "#12").
+const ADDRESS_UNIT_PATTERN = /\b(apt|unit|ste|suite)\b|#/i;
 
 /**
  * Feeds do not always provide a property type. Use it when present and valid, otherwise infer it
@@ -72,7 +76,7 @@ export const inferPropertyType = (raw: Pick<RawListing, 'propertyType' | 'descri
   for (const [type, pattern] of PROPERTY_TYPE_RULES) {
     if (pattern.test(raw.address)) return type;
   }
-  return 'single_family';
+  return ADDRESS_UNIT_PATTERN.test(raw.address) ? 'condo' : 'single_family';
 };
 
 const toNumber = (value: unknown, fallback = 0) => {

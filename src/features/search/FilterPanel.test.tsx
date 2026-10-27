@@ -46,7 +46,7 @@ describe('FilterPanel', () => {
   it('clears all filters and syncs the form with the store', async () => {
     const user = userEvent.setup();
     const { store } = renderWithStore(<FilterPanel />, {
-      filters: { q: '', location: '', minPrice: 1000, propertyTypes: ['land'], statuses: ['sold'], sort: 'newest', page: 3 },
+      filters: { q: '', location: '', minPrice: 1000, propertyTypes: ['land'], statuses: ['sold'], sort: 'newest', page: 3, resetCount: 0 },
     });
 
     expect(screen.getByLabelText('Min price')).toHaveValue(1000);
@@ -57,5 +57,21 @@ describe('FilterPanel', () => {
     expect(store.getState().filters.propertyTypes).toEqual([]);
     expect(screen.getByLabelText('Min price')).toHaveValue(null);
     expect(screen.getByLabelText('Land')).not.toBeChecked();
+  });
+
+  it('discards un-applied input when clearing with no active filters', async () => {
+    const user = userEvent.setup();
+    renderWithStore(<FilterPanel />);
+
+    await user.type(screen.getByLabelText('Min price'), '500000');
+    await user.type(screen.getByLabelText('Max price'), '100000');
+    await user.click(screen.getByRole('button', { name: 'Apply filters' }));
+    expect(await screen.findByRole('alert')).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Clear all' }));
+
+    expect(screen.getByLabelText('Min price')).toHaveValue(null);
+    expect(screen.getByLabelText('Max price')).toHaveValue(null);
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 });

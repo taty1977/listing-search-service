@@ -73,11 +73,15 @@ describe('inferPropertyType', () => {
     ['Fourplex investment, four units', 'multi_family'],
     ['Two-acre vacant land parcel', 'land'],
     ['Updated single-family home', 'single_family'],
+    ['Single-family home on a flat, usable lot', 'single_family'],
+    ['Ranch home in the #1 rated school district', 'single_family'],
+    ['Single-family home with a detached in-law unit', 'single_family'],
   ])('infers "%s" as %s', (description, expected) => {
     expect(inferPropertyType({ description, address: '1 Main St' })).toBe(expected);
   });
 
   it('uses the address when the description is not conclusive', () => {
     expect(inferPropertyType({ description: 'Great location', address: '10 Pine St #4' })).toBe('condo');
+    expect(inferPropertyType({ description: 'Great location', address: '22 Oak Ave Unit 3B' })).toBe('condo');
   });
 });
