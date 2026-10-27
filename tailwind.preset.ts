@@ -3,19 +3,23 @@
  * tokens are emitted once as CSS custom properties on `:root`, and every utility references
  * `var(--...)`, so swapping the token values (or adding a theme class) re-skins the app.
  */
-const tokens = require('./tokens/theme.tokens.cjs');
+import type { Config } from 'tailwindcss';
+import type { PluginAPI } from 'tailwindcss/types/config';
+import tokens, { type TokenTree } from './tokens/theme.tokens';
 
-const isLeaf = (value) => typeof value === 'string';
+type ScaleName = 'spacing' | 'radius' | 'font-size' | 'font-weight' | 'line-height';
+
+const isLeaf = (value: string | TokenTree): value is string => typeof value === 'string';
 
 // { text: { primary: '#000' } } -> { '--text-primary': '#000' }
-const toCssVars = (tree, path = []) =>
-  Object.entries(tree).reduce((vars, [key, value]) => {
+const toCssVars = (tree: TokenTree, path: string[] = []): Record<string, string> =>
+  Object.entries(tree).reduce<Record<string, string>>((vars, [key, value]) => {
     const next = [...path, key];
     return isLeaf(value) ? { ...vars, [`--${next.join('-')}`]: value } : { ...vars, ...toCssVars(value, next) };
   }, {});
 
 // Same tree shape with var(--...) references.
-const toVarRefs = (tree, path = []) =>
+const toVarRefs = (tree: TokenTree, path: string[] = []): TokenTree =>
   Object.fromEntries(
     Object.entries(tree).map(([key, value]) => {
       const next = [...path, key];
@@ -23,9 +27,10 @@ const toVarRefs = (tree, path = []) =>
     }),
   );
 
-const scale = (name) => toVarRefs(tokens[name], [name]);
+const scale = (name: ScaleName) => toVarRefs(tokens[name], [name]) as Record<string, string>;
 
-module.exports = {
+const preset = {
+  content: [],
   theme: {
     extend: {
       colors: toVarRefs(tokens.colors),
@@ -42,7 +47,7 @@ module.exports = {
     },
   },
   plugins: [
-    ({ addBase }) => {
+    ({ addBase }: PluginAPI) => {
       addBase({
         ':root': {
           '--font-family': tokens.fontFamily,
@@ -56,4 +61,6 @@ module.exports = {
       });
     },
   ],
-};
+} satisfies Config;
+
+export default preset;

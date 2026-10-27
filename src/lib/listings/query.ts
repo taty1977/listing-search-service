@@ -10,7 +10,7 @@ import {
   type SortOption,
 } from './types';
 
-export const DEFAULT_PAGE_SIZE = 12;
+export const DEFAULT_PAGE_SIZE = 9;
 export const MAX_PAGE_SIZE = 50;
 
 const EARTH_RADIUS_MILES = 3958.8;

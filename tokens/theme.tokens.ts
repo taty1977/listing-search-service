@@ -7,7 +7,9 @@
  * Token *values* use a commercial real-estate palette inspired by crexi.com:
  * deep navy surfaces/text, a vivid blue call-to-action color and cool neutral grays.
  */
-module.exports = {
+export type TokenTree = { [key: string]: string | TokenTree };
+
+const tokens = {
   fontFamily: "'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif",
   colors: {
     background: {
@@ -129,3 +131,5 @@ module.exports = {
     68: '68px',
   },
 };
+
+export default tokens;

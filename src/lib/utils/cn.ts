@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from 'clsx';
 import { extendTailwindMerge } from 'tailwind-merge';
 
-// Teach tailwind-merge the token scales from `tokens/theme.tokens.cjs`, otherwise e.g. `text-15`
+// Teach tailwind-merge the token scales from `tokens/theme.tokens.ts`, otherwise e.g. `text-15`
 // is treated as a text color and `font-regular` as a font family.
 const twMerge = extendTailwindMerge({
   extend: {
