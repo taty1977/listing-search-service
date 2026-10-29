@@ -40,7 +40,7 @@ export async function findListings(query: ListingQuery, feeds?: ListingFeedAdapt
   for (const listing of listings) {
     // Keep unit text and field boundaries so distinct apartments cannot collide.
     const identity = JSON.stringify(
-      [listing.address, listing.city, listing.state, listing.zip].map((value) => value.toLowerCase()),
+      [listing.address, listing.city, listing.state, listing.zip, listing.bedrooms, listing.bathrooms, listing.sqft].map((value) => typeof value === 'string' ? value.toLowerCase() : value),
     );
     const existing = byProperty.get(identity);
     const listedTime = Date.parse(listing.listedDate);
