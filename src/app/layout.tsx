@@ -31,7 +31,7 @@ export default function RootLayout({ children }: LayoutProps<'/'>) {
               <span className="flex h-8 w-8 items-center justify-center rounded-md bg-primary-500" aria-hidden>
                 <BuildingOffice2Icon className="h-5 w-5" />
               </span>
-              ListingSearch
+              Listing Search
             </Link>
             <nav aria-label="Primary" className="text-13 font-medium text-secondary-200">
               <Link href="/" className="hover:text-text-inverse">

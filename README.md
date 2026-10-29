@@ -109,6 +109,15 @@ interface ListingFeedAdapter {
 
 ### Mock API
 
+Search results deduplicate physical properties by normalized full address (including
+unit), city, state, and ZIP, ignoring case and repeated whitespace. State names and
+ZIP+4 values use the existing normalization. The most recent valid `listedDate`
+wins; equal dates retain the first record in registered-feed/record order. Valid
+dates take priority over invalid dates, which otherwise retain the first record.
+Deduplication happens before filtering, sorting, counts, and pagination, so filters
+apply to the retained record only. Street abbreviations and unit aliases are not
+inferred. Source-specific detail URLs remain accessible for all original records.
+
 `GET /api/listings` returns `{ data: Listing[], meta: { total, page, pageSize, totalPages, sources, failedSources } }`.
 
 | Param | Example | Notes |

@@ -36,7 +36,21 @@ export async function aggregateListings(feeds: ListingFeedAdapter[] = listingFee
 
 export async function findListings(query: ListingQuery, feeds?: ListingFeedAdapter[]): Promise<ListingSearchResponse> {
   const { listings, sources, failedSources } = await aggregateListings(feeds);
-  const { data, total, page, pageSize, totalPages } = searchListings(listings, query);
+  const byProperty = new Map<string, Listing>();
+  for (const listing of listings) {
+    // Keep unit text and field boundaries so distinct apartments cannot collide.
+    const identity = JSON.stringify(
+      [listing.address, listing.city, listing.state, listing.zip].map((value) => value.toLowerCase()),
+    );
+    const existing = byProperty.get(identity);
+    const listedTime = Date.parse(listing.listedDate);
+    const existingTime = existing ? Date.parse(existing.listedDate) : NaN;
+    // A valid date beats an invalid one; equal or invalid dates retain the first record.
+    if (!existing || (Number.isFinite(listedTime) && (!Number.isFinite(existingTime) || listedTime > existingTime))) {
+      byProperty.set(identity, listing);
+    }
+  }
+  const { data, total, page, pageSize, totalPages } = searchListings([...byProperty.values()], query);
   return { data, meta: { total, page, pageSize, totalPages, sources, failedSources } };
 }
 
